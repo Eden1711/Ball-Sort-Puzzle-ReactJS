@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html,
+body {
+  @apply bg-white dark:bg-gray-950;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-500 text-white font-medium px-4 py-2 rounded hover:bg-blue-600 transition;
+  }
+
+  .btn-header-game {
+    @apply items-center bg-blue-500 rounded-xl flex h-11 justify-center w-11 disabled:bg-blue-500/30 hover:bg-blue-600 transition cursor-pointer;
+  }
+}
