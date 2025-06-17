@@ -21,8 +21,6 @@ const Tube = ({
   handleOnClick,
   handlePosition,
 }: TubeProps) => {
-  console.log(style, index);
-
   const ref = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {

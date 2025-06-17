@@ -1,11 +1,30 @@
-import type { Coordinate, HeaderAction } from "~/interfaces";
+import type { Balls, Coordinate, GameProps, HeaderAction } from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
 import { Ball, GameWrapper, Header, Tube } from "./components";
-import { getStyles } from "./helpers";
+import { getInitialBalls, getInitialTestTubes, getStyles } from "./helpers";
+import { useState } from "react";
 
 const SITE_TEST = 30;
 
-const Game = () => {
+interface GamePropsComponent extends GameProps {
+  handleNextLevel: (isNextLevel?: boolean) => void;
+}
+
+const Game = ({
+  size,
+  capacity,
+  distribution,
+  handleNextLevel,
+  isSpecialLevel,
+  level,
+  tubes,
+}: GamePropsComponent) => {
+  const [balls] = useState<Balls[]>(() => getInitialBalls(tubes));
+
+  const [testTubes] = useState(() =>
+    getInitialTestTubes(tubes, distribution, capacity, size)
+  );
+
   const handleAction = (type: HeaderAction) => {
     console.log(type);
   };
