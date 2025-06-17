@@ -1,0 +1,41 @@
+.ball {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 60% 60%,
+    var(--ball-primary) 10%,
+    var(--ball-secondary) 100%
+  );
+}
+
+.ball::after {
+  content: "";
+  position: absolute;
+  top: 5%;
+  top: 10%;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.8) 14%,
+    rgba(255, 255, 255, 0) 24%
+  );
+  transform: translate(-25%) translateY(-25%) skewX(-20deg);
+  filter: blur(2px);
+}
+
+.ball.bounce {
+  animation: bounce 350ms both;
+}
+
+.ball.incognito {
+  align-items: center;
+  display: flex;
+  border: 2px solid silver;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 15px;
+  text-shadow: 1px 1px 1px #7e7e7e;
+}

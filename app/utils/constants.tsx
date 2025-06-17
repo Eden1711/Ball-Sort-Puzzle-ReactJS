@@ -4,3 +4,5 @@ export enum HEADER_ACTIONS {
   "UNDO" = "UNDO",
   "TUBE" = "TUBE",
 }
+
+export const SPEED_ANIMATION = 80;
