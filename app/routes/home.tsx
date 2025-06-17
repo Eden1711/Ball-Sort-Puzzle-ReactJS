@@ -9,7 +9,7 @@ export function meta() {
 
 export default function Home() {
   return (
-    <div className="bg-gray-800 w-full flex items-center justify-center h-screen">
+    <div className="bg-gray-800 relative w-full lg:w-[500px] overflow-hidden flex items-center justify-center h-screen">
       <Game />
     </div>
   );

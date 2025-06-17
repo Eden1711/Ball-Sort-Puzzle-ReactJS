@@ -1,6 +1,8 @@
+import { lightenDarkenColor } from "./helpers";
+
 export const COLORS_BALL = [
   "#512E5F",
-  "#641E13",
+  "#641E16",
   "#581845",
   "#0E6251",
   "#b3b303",
@@ -11,6 +13,6 @@ export const COLORS_BALL = [
   "#0000FF",
   "#FF00FF",
   "#00FFFF",
-];
+].map((color) => [color, lightenDarkenColor(color, 100)] as [string, string]);
 
 export const INCOGNITO_COLOR = "#ababab";
