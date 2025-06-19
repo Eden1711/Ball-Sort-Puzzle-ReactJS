@@ -1,5 +1,6 @@
 import type {
   Balls,
+  CoordinateTube,
   TestTubes,
   TubeDistribution,
   TubeType,
@@ -35,6 +36,26 @@ const validateLastTubeHelp = (
   return minimumTubeValue;
 };
 
+const getPositionBallTube = (
+  tubePosition: CoordinateTube,
+  size: number,
+  positionBallTube: number
+) => {
+  const { height, borderWidth } = getStyles(size, tubePosition.capacity);
+
+  const { x, y } = tubePosition;
+
+  const percentage = size * WIDTH_PADDING_PERCENTAGE;
+
+  const baseX = Math.round(x + percentage / 2);
+  const baseY = Math.round(y + height - size - borderWidth - percentage / 2);
+
+  return {
+    x: baseX,
+    y: baseY - size * positionBallTube,
+  };
+};
+
 export const getInitialBalls = (tubes: TubeType) => {
   const newBalls: Balls[] = [];
   let index = 0;
@@ -53,6 +74,8 @@ export const getInitialBalls = (tubes: TubeType) => {
           color: balls[i].value,
           colors: COLORS_BALL[balls[i].value],
         });
+
+        index++;
       }
     }
   }
@@ -111,4 +134,31 @@ export const getInitialValueDistribution = ({
   };
 
   return newDistribution;
+};
+
+export const setPositionBalls = (
+  balls: Balls[],
+  coordinates: CoordinateTube[],
+  size: number
+) => {
+  const copyBalls = JSON.parse(JSON.stringify(balls));
+
+  for (let i = 0; i < coordinates.length; i++) {
+    const ballsTube = copyBalls.filter((v: any) => v.indexTube === i);
+
+    if (ballsTube.length !== 0) {
+      for (let c = 0; c < ballsTube.length; c++) {
+        const { x, y } = getPositionBallTube(
+          coordinates[i],
+          size,
+          copyBalls[ballsTube[c].index].positionTube
+        );
+
+        copyBalls[ballsTube[c].index].x = x;
+        copyBalls[ballsTube[c].index].y = y;
+      }
+    }
+  }
+
+  return copyBalls;
 };

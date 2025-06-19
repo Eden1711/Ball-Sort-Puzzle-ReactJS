@@ -11,6 +11,8 @@ interface BallProps {
   incognito?: boolean;
   x?: number;
   y?: number;
+  index?: number;
+  positionTube?: number;
 }
 
 const Ball = ({
@@ -21,6 +23,8 @@ const Ball = ({
   incognito = false,
   x = 0,
   y = 0,
+  index = 0,
+  positionTube,
 }: BallProps) => {
   const style = {
     left: x,
@@ -38,6 +42,9 @@ const Ball = ({
   return (
     <div className={classNames} style={style}>
       {incognito && "?"}
+      <span className="w-full text-[11px] h-full border text-white flex items-center justify-center">
+        {index} - {positionTube}
+      </span>
     </div>
   );
 };
