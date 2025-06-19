@@ -9,13 +9,67 @@ export function meta() {
 
 const level = {
   size: 35,
-  distribution: [2, 1],
+  distribution: [5, 4],
   capacity: 4,
-  level: 1,
+  level: 30,
   isSpecialLevel: false,
   tubes: {
-    "0": { balls: [{ value: 5 }] },
-    "1": { balls: [{ value: 5 }, { value: 5 }, { value: 5 }] },
+    "0": {
+      balls: [
+        { value: 1, incognito: false },
+        { value: 8, incognito: false },
+        { value: 1, incognito: false },
+        { value: 6, incognito: false },
+      ],
+    },
+    "1": {
+      balls: [
+        { value: 4, incognito: false },
+        { value: 8, incognito: false },
+        { value: 1, incognito: false },
+        { value: 4, incognito: false },
+      ],
+    },
+    "2": {
+      balls: [
+        { value: 5, incognito: false },
+        { value: 5, incognito: false },
+        { value: 9, incognito: false },
+        { value: 6, incognito: false },
+      ],
+    },
+    "3": {
+      balls: [
+        { value: 1, incognito: false },
+        { value: 9, incognito: false },
+        { value: 9, incognito: false },
+        { value: 8, incognito: false },
+      ],
+    },
+    "4": {
+      balls: [
+        { value: 5, incognito: false },
+        { value: 5, incognito: false },
+        { value: 6, incognito: false },
+        { value: 4, incognito: false },
+      ],
+    },
+    "6": {
+      balls: [
+        { value: 4, incognito: false },
+        { value: 7, incognito: false },
+        { value: 6, incognito: false },
+        { value: 8, incognito: false },
+      ],
+    },
+    "8": {
+      balls: [
+        { value: 7, incognito: false },
+        { value: 7, incognito: false },
+        { value: 7, incognito: false },
+        { value: 9, incognito: false },
+      ],
+    },
   },
   levelCompleted: false,
 };

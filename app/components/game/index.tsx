@@ -1,20 +1,21 @@
 import type {
   Balls,
   Coordinate,
+  CoordinateTube,
   GameProps,
   HeaderAction,
   TestTubes,
   TubeDistribution,
 } from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
-import { Ball, GameWrapper, Header, Tube } from "./components";
+import { Ball, GameWrapper, Header, Tube, Tubes } from "./components";
 import {
   getInitialBalls,
   getInitialTestTubes,
   getInitialValueDistribution,
   getStyles,
 } from "./helpers";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const SITE_TEST = 30;
 
@@ -31,9 +32,9 @@ const Game = ({
   level,
   tubes,
 }: GamePropsComponent) => {
+  const tubeRef = useRef<CoordinateTube[]>([]);
   const [balls] = useState<Balls[]>(() => getInitialBalls(tubes));
 
-  // save tube infomation
   const [testTubes] = useState<TestTubes[]>(() =>
     getInitialTestTubes(tubes, distribution, capacity, size)
   );
@@ -53,8 +54,8 @@ const Game = ({
     console.log(indexSelectedTube);
   };
 
-  const handlePosition = (index: number, data: Coordinate) => {
-    console.log(index, data, "----");
+  const handlePosition = (index: number, data: CoordinateTube) => {
+    tubeRef.current[index] = data;
   };
   return (
     <GameWrapper disableUI={false}>
@@ -65,7 +66,14 @@ const Game = ({
         tubeHelpEnabled={tubeDistribution.isComplete}
         handleAction={handleAction}
       />
-      <Ball colors={COLORS_BALL[0]} size={SITE_TEST} x={235} y={445} />
+      <Tubes
+        distribution={tubeDistribution.distribution}
+        size={size}
+        testTubes={testTubes}
+        handleOnClick={handleOnClick}
+        handlePosition={handlePosition}
+      />
+      {/* <Ball colors={COLORS_BALL[0]} size={SITE_TEST} x={235} y={445} />
       <Ball
         colors={COLORS_BALL[2]}
         size={SITE_TEST}
@@ -91,7 +99,7 @@ const Game = ({
           handleOnClick={handleOnClick}
           handlePosition={handlePosition}
         />
-      </div>
+      </div> */}
       {/* {COLORS_BALL.map((color, index) => (
         <Ball
           key={index}

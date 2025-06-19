@@ -38,7 +38,6 @@ const validateLastTubeHelp = (
 export const getInitialBalls = (tubes: TubeType) => {
   const newBalls: Balls[] = [];
   let index = 0;
-  console.log("---", tubes);
 
   for (let tube in tubes) {
     const balls = tubes[tube].balls || [];
@@ -104,16 +103,6 @@ export const getInitialValueDistribution = ({
   distribution,
   testTubes,
 }: GetInitialValueDistribution) => {
-  console.log(
-    {
-      balls,
-      capacity,
-      distribution,
-      testTubes,
-    },
-    "1111"
-  );
-
   const minimumTubeValue = validateLastTubeHelp(testTubes, balls, capacity);
 
   const newDistribution: TubeDistribution = {

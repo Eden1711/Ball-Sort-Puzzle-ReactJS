@@ -37,7 +37,12 @@ const Tube = ({
       style={style}
       onClick={() => handleOnClick(index)}
     >
-      <Confetti recycle={false} width={200} height={300} />
+      <Confetti
+        run={isComplete && showConfetti}
+        recycle={false}
+        width={200}
+        height={300}
+      />
     </button>
   );
 };

@@ -7,6 +7,10 @@ export interface Coordinate {
   y: number;
 }
 
+export interface CoordinateTube extends Coordinate {
+  capacity: number;
+}
+
 export interface BallsInTestTubes {
   value: number;
   incognito?: boolean;
