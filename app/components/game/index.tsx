@@ -1,7 +1,19 @@
-import type { Balls, Coordinate, GameProps, HeaderAction } from "~/interfaces";
+import type {
+  Balls,
+  Coordinate,
+  GameProps,
+  HeaderAction,
+  TestTubes,
+  TubeDistribution,
+} from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
 import { Ball, GameWrapper, Header, Tube } from "./components";
-import { getInitialBalls, getInitialTestTubes, getStyles } from "./helpers";
+import {
+  getInitialBalls,
+  getInitialTestTubes,
+  getInitialValueDistribution,
+  getStyles,
+} from "./helpers";
 import { useState } from "react";
 
 const SITE_TEST = 30;
@@ -21,8 +33,16 @@ const Game = ({
 }: GamePropsComponent) => {
   const [balls] = useState<Balls[]>(() => getInitialBalls(tubes));
 
-  const [testTubes] = useState(() =>
+  // save tube infomation
+  const [testTubes] = useState<TestTubes[]>(() =>
     getInitialTestTubes(tubes, distribution, capacity, size)
+  );
+
+  // setTubeDistribution
+  // Save the local distribution of the pipes
+  // this is necessary beacause it can mutate when a new tube add.
+  const [tubeDistribution] = useState(() =>
+    getInitialValueDistribution({ balls, capacity, distribution, testTubes })
   );
 
   const handleAction = (type: HeaderAction) => {
@@ -42,7 +62,7 @@ const Game = ({
         level={1}
         isSpecialLevel={true}
         totalUndo={0}
-        tubeHelpEnabled={false}
+        tubeHelpEnabled={tubeDistribution.isComplete}
         handleAction={handleAction}
       />
       <Ball colors={COLORS_BALL[0]} size={SITE_TEST} x={235} y={445} />

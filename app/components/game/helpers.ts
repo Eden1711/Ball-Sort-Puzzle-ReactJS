@@ -1,4 +1,9 @@
-import type { Balls, TestTubes, TubeType } from "~/interfaces";
+import type {
+  Balls,
+  TestTubes,
+  TubeDistribution,
+  TubeType,
+} from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
 import {
   HEIGHT_OFFSET_PERCENTAGE,
@@ -11,6 +16,23 @@ export const getStyles = (size: number, capacity: number) => {
   const height = Math.round(size * capacity + size * HEIGHT_OFFSET_PERCENTAGE);
 
   return { width, borderWidth, height };
+};
+
+const validateLastTubeHelp = (
+  testTubes: TestTubes[],
+  balls: Balls[],
+  capacity: number
+) => {
+  const lastTube = testTubes[testTubes.length - 1];
+
+  const totalTubesFill = [...new Set(balls.map((v) => v.color))].length;
+
+  const totalTubes = testTubes.length;
+
+  const minimumTubeValue =
+    totalTubes + 1 <= totalTubesFill + 3 || lastTube.capacity < capacity;
+
+  return minimumTubeValue;
 };
 
 export const getInitialBalls = (tubes: TubeType) => {
@@ -66,4 +88,38 @@ export const getInitialTestTubes = (
       style: getStyles(size, tubeCapacity),
     });
   }
+  return newTestTubes;
+};
+
+interface GetInitialValueDistribution {
+  balls: Balls[];
+  capacity: number;
+  distribution: number[];
+  testTubes: TestTubes[];
+}
+
+export const getInitialValueDistribution = ({
+  balls,
+  capacity,
+  distribution,
+  testTubes,
+}: GetInitialValueDistribution) => {
+  console.log(
+    {
+      balls,
+      capacity,
+      distribution,
+      testTubes,
+    },
+    "1111"
+  );
+
+  const minimumTubeValue = validateLastTubeHelp(testTubes, balls, capacity);
+
+  const newDistribution: TubeDistribution = {
+    distribution,
+    isComplete: !minimumTubeValue,
+  };
+
+  return newDistribution;
 };

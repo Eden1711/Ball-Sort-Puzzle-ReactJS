@@ -48,3 +48,8 @@ export interface Balls {
   x?: number;
   y?: number;
 }
+
+export interface TubeDistribution {
+  distribution: number[];
+  isComplete: boolean;
+}

@@ -9,7 +9,7 @@ export function meta() {
 
 const level = {
   size: 35,
-  distribution: [2],
+  distribution: [2, 1],
   capacity: 4,
   level: 1,
   isSpecialLevel: false,
