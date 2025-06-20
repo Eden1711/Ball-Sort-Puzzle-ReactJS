@@ -1,6 +1,8 @@
+import type React from "react";
 import type {
   Balls,
   CoordinateTube,
+  SelectdItems,
   TestTubes,
   TubeDistribution,
   TubeType,
@@ -8,6 +10,7 @@ import type {
 import { COLORS_BALL } from "~/utils/colors";
 import {
   HEIGHT_OFFSET_PERCENTAGE,
+  INITIAL_SELECT_ITEMS,
   WIDTH_PADDING_PERCENTAGE,
 } from "~/utils/constants";
 
@@ -54,6 +57,13 @@ const getPositionBallTube = (
     x: baseX,
     y: baseY - size * positionBallTube,
   };
+};
+
+const getPositionBallOutsideTube = (
+  tubePosition: CoordinateTube,
+  size: number
+) => {
+  return tubePosition.y - (size + size * 0.2);
 };
 
 export const getInitialBalls = (tubes: TubeType) => {
@@ -161,4 +171,115 @@ export const setPositionBalls = (
   }
 
   return copyBalls;
+};
+
+interface ValidateSelectedTubes {
+  balls: Balls[];
+  indexSelectedTube: number;
+  selectedItems: SelectdItems;
+  size: number;
+  testTubes: TestTubes[];
+  tubePositions: CoordinateTube[];
+  setBalls: React.Dispatch<React.SetStateAction<Balls[]>>;
+  setSelectedItems: React.Dispatch<React.SetStateAction<SelectdItems>>;
+}
+
+export const validateSelectedTubes = ({
+  balls,
+  indexSelectedTube,
+  selectedItems,
+  size,
+  testTubes,
+  tubePositions,
+  setBalls,
+  setSelectedItems,
+}: ValidateSelectedTubes) => {
+  const copyBalls: Balls[] = JSON.parse(JSON.stringify(balls));
+
+  const { originBallIndex, originTubeIndex } = selectedItems;
+
+  // infomation select tube
+  const tube = testTubes[indexSelectedTube];
+
+  const ballTube = tube.balls;
+
+  // validate if select tube is empty
+  const isEmpty = ballTube.length === 0;
+
+  // get index first ball in tube if not empty
+  const ballIndex = !isEmpty ? ballTube[ballTube.length - 1] : -1;
+
+  // find ball can move to another tube
+  let ballCanMove = false;
+
+  if (originTubeIndex < 0) {
+    if (!isEmpty && !copyBalls[ballIndex].incognito) {
+      copyBalls[ballIndex].originalY = copyBalls[ballIndex].y;
+      copyBalls[ballIndex].animate = true;
+
+      copyBalls[ballIndex].y = getPositionBallOutsideTube(
+        tubePositions[indexSelectedTube],
+        size
+      );
+
+      copyBalls[ballIndex].bounce = false;
+
+      setBalls(copyBalls);
+
+      setSelectedItems({
+        originBallIndex: ballIndex,
+        originTubeIndex: indexSelectedTube,
+      });
+    }
+  } else {
+    if (originTubeIndex === indexSelectedTube) {
+      copyBalls[ballIndex].y = copyBalls[ballIndex].originalY;
+      copyBalls[ballIndex].animate = true;
+      copyBalls[ballIndex].bounce = true;
+
+      setBalls(copyBalls);
+      setSelectedItems(INITIAL_SELECT_ITEMS);
+    } else {
+      if (isEmpty) {
+        ballCanMove = true;
+      } else {
+        const ballMove = balls[originBallIndex];
+        const firstBallTargetTube = balls[ballIndex];
+
+        const isSameColor = ballMove.color === firstBallTargetTube.color;
+
+        const isIncognito = firstBallTargetTube.incognito;
+
+        const isFullTube = tube.balls.length === tube.capacity;
+
+        if (isSameColor && !isFullTube && !isIncognito) {
+          ballCanMove = true;
+        } else {
+          copyBalls[originBallIndex].y = copyBalls[originBallIndex].originalY;
+          copyBalls[originBallIndex].animate = true;
+          copyBalls[originBallIndex].bounce = true;
+
+          // the new ball select
+          copyBalls[ballIndex].animate = true;
+          copyBalls[ballIndex].bounce = false;
+          copyBalls[ballIndex].originalY = copyBalls[ballIndex].y;
+          copyBalls[ballIndex].y = getPositionBallOutsideTube(
+            tubePositions[indexSelectedTube],
+            size
+          );
+
+          setBalls(copyBalls);
+
+          setSelectedItems({
+            originBallIndex: ballIndex,
+            originTubeIndex: indexSelectedTube,
+          });
+        }
+      }
+    }
+  }
+
+  if (ballCanMove) {
+    console.log("move");
+  }
 };

@@ -1,3 +1,5 @@
+import type { SelectdItems } from "~/interfaces";
+
 export enum HEADER_ACTIONS {
   "HOME" = "HOME",
   "RESTART" = "RESTART",
@@ -14,7 +16,10 @@ export const WIDTH_PADDING_PERCENTAGE = 0.4;
 
 export const HEIGHT_OFFSET_PERCENTAGE = 0.95;
 
-export const INITIAL_SELECT_ITEMS = { originTubeIndex: -1, originBallInde: -1 };
+export const INITIAL_SELECT_ITEMS: SelectdItems = {
+  originTubeIndex: -1,
+  originBallIndex: -1,
+};
 
 export const INITIAL_TWEEN_BALLS = {
   tweens: [],

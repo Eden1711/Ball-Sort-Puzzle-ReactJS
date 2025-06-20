@@ -57,3 +57,8 @@ export interface TubeDistribution {
   distribution: number[];
   isComplete: boolean;
 }
+
+export interface SelectdItems {
+  originTubeIndex: number;
+  originBallIndex: number;
+}

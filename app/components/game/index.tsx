@@ -1,11 +1,12 @@
-import type {
-  Balls,
-  Coordinate,
-  CoordinateTube,
-  GameProps,
-  HeaderAction,
-  TestTubes,
-  TubeDistribution,
+import {
+  type Balls,
+  type Coordinate,
+  type CoordinateTube,
+  type GameProps,
+  type HeaderAction,
+  type SelectdItems,
+  type TestTubes,
+  type TubeDistribution,
 } from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
 import {
@@ -22,8 +23,10 @@ import {
   getInitialValueDistribution,
   getStyles,
   setPositionBalls,
+  validateSelectedTubes,
 } from "./helpers";
 import { useEffect, useRef, useState } from "react";
+import { INITIAL_SELECT_ITEMS } from "~/utils/constants";
 
 const SITE_TEST = 30;
 
@@ -54,6 +57,9 @@ const Game = ({
     getInitialValueDistribution({ balls, capacity, distribution, testTubes })
   );
 
+  const [selectedItems, setSelectedItems] =
+    useState<SelectdItems>(INITIAL_SELECT_ITEMS);
+
   useEffect(() => {
     setBalls((data) => setPositionBalls(data, tubesRef.current, size));
   }, [size, tubeDistribution]);
@@ -63,6 +69,16 @@ const Game = ({
   };
 
   const handleOnClick = (indexSelectedTube: number) => {
+    validateSelectedTubes({
+      balls,
+      indexSelectedTube,
+      selectedItems,
+      size,
+      testTubes,
+      tubePositions: tubesRef.current,
+      setBalls,
+      setSelectedItems,
+    });
     console.log(indexSelectedTube);
   };
 
