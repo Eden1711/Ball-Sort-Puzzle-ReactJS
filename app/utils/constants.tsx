@@ -1,4 +1,4 @@
-import type { SelectdItems } from "~/interfaces";
+import type { SelectdItems, Tween } from "~/interfaces";
 
 export enum HEADER_ACTIONS {
   "HOME" = "HOME",
@@ -21,7 +21,7 @@ export const INITIAL_SELECT_ITEMS: SelectdItems = {
   originBallIndex: -1,
 };
 
-export const INITIAL_TWEEN_BALLS = {
+export const INITIAL_TWEEN_BALLS: Tween = {
   tweens: [],
   tubes: { origin: -1, destinity: -1 },
 };

@@ -62,3 +62,20 @@ export interface SelectdItems {
   originTubeIndex: number;
   originBallIndex: number;
 }
+
+export interface TweenBall {
+  tweenIndex: number;
+  ballIndex: number;
+  positionTube?: number;
+  completed: boolean;
+  x: number;
+  y: number;
+}
+
+export interface Tween {
+  tweens: TweenBall[];
+  tubes: {
+    origin: number;
+    destinity: number;
+  };
+}

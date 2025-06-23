@@ -7,6 +7,7 @@ import {
   type SelectdItems,
   type TestTubes,
   type TubeDistribution,
+  type Tween,
 } from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
 import {
@@ -26,7 +27,7 @@ import {
   validateSelectedTubes,
 } from "./helpers";
 import { useEffect, useRef, useState } from "react";
-import { INITIAL_SELECT_ITEMS } from "~/utils/constants";
+import { INITIAL_SELECT_ITEMS, INITIAL_TWEEN_BALLS } from "~/utils/constants";
 
 const SITE_TEST = 30;
 
@@ -60,6 +61,8 @@ const Game = ({
   const [selectedItems, setSelectedItems] =
     useState<SelectdItems>(INITIAL_SELECT_ITEMS);
 
+  const [tweenBalls, setTweenBalls] = useState<Tween>(INITIAL_TWEEN_BALLS);
+
   useEffect(() => {
     setBalls((data) => setPositionBalls(data, tubesRef.current, size));
   }, [size, tubeDistribution]);
@@ -78,16 +81,17 @@ const Game = ({
       tubePositions: tubesRef.current,
       setBalls,
       setSelectedItems,
+      setTweenBalls,
     });
-    console.log(indexSelectedTube);
   };
 
   const handlePosition = (index: number, data: CoordinateTube) => {
     tubesRef.current[index] = data;
   };
 
+  const disabledUI = tweenBalls.tubes.origin >= 0;
   return (
-    <GameWrapper disableUI={false}>
+    <GameWrapper disableUI={disabledUI}>
       <Header
         level={level}
         isSpecialLevel={true}

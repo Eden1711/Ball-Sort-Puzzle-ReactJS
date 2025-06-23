@@ -6,6 +6,8 @@ import type {
   TestTubes,
   TubeDistribution,
   TubeType,
+  Tween,
+  TweenBall,
 } from "~/interfaces";
 import { COLORS_BALL } from "~/utils/colors";
 import {
@@ -91,6 +93,78 @@ export const getInitialBalls = (tubes: TubeType) => {
   }
 
   return newBalls;
+};
+
+const getTweensBall = (
+  ballIndex: number,
+  tubePositions: CoordinateTube[],
+  originTubeIndex: number,
+  targetTubeIndex: number,
+  size: number,
+  positionBallTube: number,
+  balls: Balls[],
+  firstBall: false
+) => {
+  const tween: TweenBall[] = [];
+
+  const { x, y } = getPositionBallTube(
+    tubePositions[targetTubeIndex],
+    size,
+    positionBallTube
+  );
+
+  tween.push(
+    {
+      ballIndex,
+      tweenIndex: 1,
+      completed: firstBall,
+      x: balls[ballIndex].x || 0,
+      y: getPositionBallOutsideTube(tubePositions[originTubeIndex], size),
+    },
+    {
+      ballIndex,
+      tweenIndex: 2,
+      completed: false,
+      x,
+      y: getPositionBallOutsideTube(tubePositions[originTubeIndex], size),
+    },
+    {
+      ballIndex,
+      tweenIndex: 3,
+      completed: false,
+      x,
+      y,
+      positionTube: positionBallTube,
+    }
+  );
+};
+
+interface GenerateTweenBalls {
+  originBallIndex: number;
+  testTubes: TestTubes[];
+  originTubeIndex: number;
+  targetTubeIndex: number;
+  tubePositions: CoordinateTube[];
+  size: number;
+  balls: Balls[];
+}
+
+const generateTweenBalls = ({
+  originBallIndex,
+  testTubes,
+  originTubeIndex,
+  targetTubeIndex,
+  tubePositions,
+  size,
+  balls,
+}: GenerateTweenBalls) => {
+  const colorBallMove = balls[originBallIndex].color;
+
+  const positionBallTube = testTubes[targetTubeIndex].balls.length;
+
+  console.log({ colorBallMove, positionBallTube });
+
+  const tween: TweenBall[] = getTweensBall(originBallIndex, tubePositions);
 };
 
 export const getInitialTestTubes = (
@@ -182,6 +256,7 @@ interface ValidateSelectedTubes {
   tubePositions: CoordinateTube[];
   setBalls: React.Dispatch<React.SetStateAction<Balls[]>>;
   setSelectedItems: React.Dispatch<React.SetStateAction<SelectdItems>>;
+  setTweenBalls: React.Dispatch<React.SetStateAction<Tween>>;
 }
 
 export const validateSelectedTubes = ({
@@ -193,6 +268,7 @@ export const validateSelectedTubes = ({
   tubePositions,
   setBalls,
   setSelectedItems,
+  setTweenBalls,
 }: ValidateSelectedTubes) => {
   const copyBalls: Balls[] = JSON.parse(JSON.stringify(balls));
 
@@ -280,6 +356,15 @@ export const validateSelectedTubes = ({
   }
 
   if (ballCanMove) {
+    generateTweenBalls({
+      originBallIndex,
+      testTubes,
+      originTubeIndex,
+      targetTubeIndex: indexSelectedTube,
+      tubePositions,
+      size,
+      balls,
+    });
     console.log("move");
   }
 };
