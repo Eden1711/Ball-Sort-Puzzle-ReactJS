@@ -103,7 +103,7 @@ const getTweensBall = (
   size: number,
   positionBallTube: number,
   balls: Balls[],
-  firstBall: false
+  firstBall?: boolean
 ) => {
   const tween: TweenBall[] = [];
 
@@ -137,6 +137,8 @@ const getTweensBall = (
       positionTube: positionBallTube,
     }
   );
+
+  return tween;
 };
 
 interface GenerateTweenBalls {
@@ -164,7 +166,64 @@ const generateTweenBalls = ({
 
   console.log({ colorBallMove, positionBallTube });
 
-  const tween: TweenBall[] = getTweensBall(originBallIndex, tubePositions);
+  const tween: TweenBall[] = getTweensBall(
+    originBallIndex,
+    tubePositions,
+    originTubeIndex,
+    targetTubeIndex,
+    size,
+    positionBallTube,
+    balls,
+    true
+  );
+
+  const tweens: TweenBall[][] = [tween];
+
+  let counterNextBall = 2;
+  let counterNewBall = 1;
+
+  do {
+    const indexNextBall =
+      testTubes[originTubeIndex].balls.length - counterNextBall;
+
+    if (indexNextBall >= 0) {
+      const nextBall = testTubes[originTubeIndex].balls[indexNextBall];
+      const colorNextBall = balls[nextBall].color;
+      const isIncognito = balls[nextBall].incognito;
+
+      if (colorNextBall === colorBallMove && !isIncognito) {
+        const nextPositionBallTube =
+          testTubes[targetTubeIndex].balls.length + counterNewBall;
+
+        const isFullTube =
+          nextPositionBallTube === testTubes[targetTubeIndex].capacity;
+
+        if (!isFullTube) {
+          const nextTween: TweenBall[] = getTweensBall(
+            nextBall,
+            tubePositions,
+            originTubeIndex,
+            targetTubeIndex,
+            size,
+            nextPositionBallTube,
+            balls
+          );
+
+          tweens.push(nextTween);
+
+          counterNextBall++;
+          counterNewBall++;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+    } else {
+      break;
+    }
+  } while (1);
+  return tweens;
 };
 
 export const getInitialTestTubes = (
@@ -356,7 +415,7 @@ export const validateSelectedTubes = ({
   }
 
   if (ballCanMove) {
-    generateTweenBalls({
+    const tweens = generateTweenBalls({
       originBallIndex,
       testTubes,
       originTubeIndex,
@@ -365,6 +424,15 @@ export const validateSelectedTubes = ({
       size,
       balls,
     });
-    console.log("move");
+
+    setTweenBalls({
+      tweens,
+      tubes: {
+        origin: originTubeIndex,
+        destinity: indexSelectedTube,
+      },
+    });
+
+    setSelectedItems(INITIAL_SELECT_ITEMS);
   }
 };

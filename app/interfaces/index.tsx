@@ -73,7 +73,7 @@ export interface TweenBall {
 }
 
 export interface Tween {
-  tweens: TweenBall[];
+  tweens: TweenBall[][];
   tubes: {
     origin: number;
     destinity: number;
